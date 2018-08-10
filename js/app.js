@@ -1,52 +1,40 @@
 
-function makeGrid(height, width) {
+  (function() {
+  
 
-  var output = "";
+  // set variables
+  const $colorPicker = document.getElementById("colorPicker");
+  const $sizePicker = document.getElementById("sizePicker");
+  const $table = document.getElementById("pixel_canvas");
 
-  for (var h = 0; h < height; h++) {
+  // add listener to select grid size
+  $sizePicker.addEventListener('submit', function() {
+    // stop page from refresh on submit
+    event.preventDefault();
 
-    output += "<tr>";
+    // get input data and draw grid
+    let width = document.getElementById("input_width").value;
+    let height = document.getElementById("input_height").value;
+    makeGrid(width, height);
+  })
 
-    for (var w = 0; w < width; w++) {
-      output += "<td></td>";
+  // grid
+  function makeGrid(width, height) {
+    $table.innerHTML = '';
+    for (let row = 0; row < width; row++) {
+      let newRow = $table.insertRow();
+        for (let cell= 0; cell < height; cell++ ) {
+          // add new cell with listener to change color
+          let newCell = newRow.insertCell();
+          newCell.onclick = changeColor;
+        }
     }
-
-    output += "</tr>";
-
   }
 
-  return output;
-
-}
-
-function changeColor(cell) {
-
-  // Select color input
-  var color = $('#colorPicker').val();
-
-  if (cell.attr('style')) {
-    cell.removeAttr('style');
-
-  } else {
-    cell.attr('style', 'background-color:' + color);
-
+  // changing the color once clicked
+  function changeColor() {
+    this.style.background = $colorPicker.value;
   }
-}
 
-
-$('form').on('submit', function(e) {
-  e.preventDefault();
-
-  var gridHeight = $('#inputHeight').val();
-  var gridWidth = $('#inputWeight').val();
-
-
-  $('table').html(makeGrid(gridHeight, gridWidth));
-});
-
-
-$('#pixelCanvas').on('click', 'td', function() {
-
-  changeColor($( this ));
-
-});
+})();
+  
